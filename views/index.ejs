@@ -16,7 +16,7 @@
     <title>Short_URL_CREATER</title>
 </head>
 
-<body>
+<body class="  bg-light-subtle text-emphasis-light">
     <% if(tr1!=""){ %>
         <div class="alert alert-info alert-dismissible fade show" role="alert">
             <%= tr1  %>
@@ -24,23 +24,42 @@
         </div>
     <% } %>
 
-    <h1 class="display-6 text-center">URL-SHORTENER</h1>
+    <!-- <h1 class="display-6 text-center my-3">URL-SHORTENER</h1> -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand fs-2 h1 my-1 me-5" href="/">URL_SHORTENER</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link mx-5 fs-4" aria-current="page" href="/">Create-url</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link mx-5 fs-4" href="/search">Search-url</a>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </nav>
     <form action="/create" method="POST">
         <div class="container text-center">
-            <h5>Create</h5>
-            <div class="input-group mb-3">
-                <input type="text" name="cUrl" class="form-control" placeholder="URL" aria-label="Recipient's username"
-                    aria-describedby="button-addon2">
+            <h5 class="my-5">Generate New Shortened Url</h5>
+            <div class="input-group mb-3 my-3">
+                <input type="text" name="cUrl" class="form-control my-3" placeholder="URL" aria-label="Recipient's username"
+                    aria-describedby="button-addon2" required>
                 <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button> -->
             </div>
             <div class="input-group mb-3">
-                <input type="text" name="cNote" class="form-control" placeholder="Note"
-                    aria-label="Recipient's username" aria-describedby="button-addon2">
+                <input type="text" name="cNote" class="form-control my-3" placeholder="Note"
+                    aria-label="Recipient's username" aria-describedby="button-addon2" required>
             </div>
             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Create</button>
         </div>
     </form>
-
+    <% if(tr3.length>0){%>
     <div class="container text-center my-5">
         <div class="table-responsive">
             <table class="table">
@@ -58,12 +77,13 @@
                             <td><%= shortUrl.note %></td>
                             <td><a href="<%= shortUrl.short %>"><%= shortUrl.short %></a></td>
                         </tr>
-                    <% }) %>
+                    <%})%>
 
                 </tbody>
               </table>
         </div>
     </div>
+    <%}%>
 </body>
 
 </html>
