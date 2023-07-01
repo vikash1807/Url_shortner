@@ -90,7 +90,7 @@ app.post('/create', async (req, res) => {
 
     if (note.length > 0) {
         req.flash('tr6', "Note already exists")
-        return res.redirect('/');
+        return res.redirect('/create');
     }
 
     if (url.length == 0) {
