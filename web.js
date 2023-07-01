@@ -5,6 +5,7 @@ const ejs = require('ejs');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
+var md5 = require('md5');
 
 
 const app = express();
@@ -12,7 +13,7 @@ const app = express();
 main().catch(err => console.log(err));
 
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/shortUrl');
+    await mongoose.connect('mongodb://127.0.0.1:27017/urlsrt');
 
 }
 
@@ -47,18 +48,35 @@ const srtUrlSchema = new mongoose.Schema({
     
 })
 
+
+const userSchema = new mongoose.Schema({
+    email : String,
+    password : String
+});
+
 const SrtUrl = mongoose.model('SrtUrl', srtUrlSchema);
+const User = mongoose.model("User", userSchema);
+
 
 app.get('/search', async (req, res) => {
     res.render('search',{tr2:req.flash('tr2'),tr6:req.flash('tr6'),tr4:req.flash('tr4')});
 })
 
 app.get('/', async (req, res) => {
-    // let temp3 = req.flash('tr5')
-    // let temp4 = req.flash('tr6')
+    res.render('login',{tr7:req.flash('tr7'),tr8:req.flash('tr8'),tr11:req.flash('tr11')});
+})
+app.get('/signup', async (req, res) => {
+    res.render('signup')
+})
+app.get('/reset', async (req, res) => {
+    res.render('reset',{tr9:req.flash('tr9'),tr10:req.flash('tr10')})
+})
+
+app.get('/create', async (req, res) => {
+   
     const temp_url = await SrtUrl.find({ fullurl:req.flash('tr3')});
 
-    console.log(await SrtUrl.find({ fullurl:req.flash('tr3')}));
+    // console.log(await SrtUrl.find({ fullurl:req.flash('tr3')}));
     res.render('index',{tr1: req.flash('tr1'), tr6:req.flash('tr6'), tr3:temp_url});
 })
 
@@ -87,7 +105,7 @@ app.post('/create', async (req, res) => {
             req.flash('tr3', Url)
         }
 
-        res.redirect('/');
+        res.redirect('/create');
     }
     else {
         // console.log("note already exists1212")
@@ -121,9 +139,67 @@ app.post('/search', async (req, res) => {
     }
     else {
         req.flash('tr5', "Short URL not exists, you can create short url here")
-        res.redirect('/')
+        res.redirect('/create')
     }
 
+})
+
+app.post('/signup' ,async (req, res) => {
+    const newUser = new User({
+        email : req.body.username1,
+        password : md5(req.body.password1)
+    })
+
+    newUser.save();
+
+    res.redirect('/create');
+})
+
+app.post('/login', async (req,res) => {
+    const username = req.body.username2;
+    const password = md5(req.body.password2);
+
+    let user = await User.findOne({email : username});
+    if(user){
+        if(user.password===password){
+            res.redirect('/create');
+        }
+        else{
+            req.flash('tr7', "password not match");
+            res.redirect('/')
+        }
+    }
+    else{
+        req.flash('tr8', "user not found, please register first");
+        res.redirect('/')
+    }
+})
+
+app.post('/reset', async (req, res) => {
+    const username = req.body.username3;
+    const password1 = md5(req.body.pass1);
+    const password2 = md5(req.body.pass2);
+    let user = await User.findOne({email : username});
+    // console.log(md5(user.password));
+    if(user){
+        if(password1 === password2){
+            await User.updateOne(    
+                {email : username},
+                {password : password1},
+            )
+
+            req.flash('tr11', "password changes successfully");
+            res.redirect('/');
+        }
+        else{
+            req.flash('tr10', "confirm password not match");
+            res.redirect('/reset')
+        }
+    }
+    else{
+        req.flash('tr9', "user not found");
+        res.redirect('/reset')
+    }
 })
 
 app.get('/:shortUrl', async (req, res) => {

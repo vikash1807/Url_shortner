@@ -16,7 +16,7 @@
     <title>Short_URL_CREATER</title>
 </head>
 
-<body class="  bg-light-subtle text-emphasis-light">
+<body class="  bg-info-subtle text-emphasis-light">
     <% if(tr1!=""){ %>
         <div class="alert alert-info alert-dismissible fade show" role="alert">
             <%= tr1  %>
@@ -34,10 +34,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link mx-5 fs-4" aria-current="page" href="/">Create-url</a>
+                <a class="nav-link mx-5 fs-4" aria-current="page" href="/create">Create-url</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link mx-5 fs-4" href="/search">Search-url</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link mx-5 fs-4" href="/">Logout</a>
               </li>
               
             </ul>
@@ -67,7 +70,7 @@
                   <tr>
                     <th scope="col">URL</th>
                     <th scope="col">NOTE</th>
-                    <th scope="col">SHORT-URL</th>
+                    <th scope="col">SHORTENED-URL</th>
                   </tr>
                 </thead>
                 <tbody>
